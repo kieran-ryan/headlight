@@ -1,0 +1,127 @@
+app:
+  title: Scaffolded Backstage App
+  baseUrl: http://localhost:3000
+
+organization:
+  name: My Company
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  # See backend-to-backend-auth.md in the docs for information on the format
+  # auth:
+  #   keys:
+  #     - secret: ${BACKEND_SECRET}
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: sqlite3
+    connection: ':memory:'
+  cache:
+    store: memory
+  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+
+integrations:
+  github:
+    - host: github.com
+      token: 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
+    ### Example for how to add your GitHub Enterprise instance using the API:
+    # - host: ghe.example.net
+    #   apiBaseUrl: https://ghe.example.net/api/v3
+    #   token: ${GHE_TOKEN}
+  gitlab:
+    - host: gitlab.com
+      token: glpat-EAa1yAW5F7sqoN2_ag2W
+
+proxy:
+  '/test':
+    target: 'https://example.com'
+    changeOrigin: true
+
+# Reference documentation http://backstage.io/docs/features/techdocs/configuration
+# Note: After experimenting with basic setup, use CI/CD to generate docs
+# and an external cloud storage when deploying TechDocs for production use-case.
+# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+techdocs:
+  builder: 'local' # Alternatives - 'external'
+  generator:
+    runIn: 'docker' # Alternatives - 'local'
+  publisher:
+    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+
+auth:
+  # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
+  providers:
+    gitlab:
+      development:
+        clientId: "cb008613d5e7da38e5ee5dc7cc8db9661668be582d2af11f1138d0c542512a69"
+        clientSecret: "e0d5b194f1bc211af6650228938e74c15848ebb6156b1388877a403bb00df700"
+        ## uncomment if using self-hosted GitLab
+        # audience: https://gitlab.company.com
+        audience : https://gitlab.com
+    github:
+      development:
+        clientId: "aacd7c02dcd1a3719010"
+        clientSecret: "f61aa50d73c6bf22b5b7fc4f63d71d726a499b57"
+
+scaffolder:
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+
+catalog:
+  rules:
+    - allow: [Component, System, API, Group, User, Resource, Location]
+  locations:
+    # Backstage example components
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-components.yaml
+
+    # Backstage example systems
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-systems.yaml
+
+    # Backstage example APIs
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-apis.yaml
+
+    # Backstage example resources
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all-resources.yaml
+
+    # Backstage example organization groups
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme/org.yaml
+
+    # Backstage example templates
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/react-ssr-template/template.yaml
+      rules:
+        - allow: [Template]
+    - type: url
+      target: https://github.com/kieran-ryan/r-temp/blob/main/template.yaml
+      rules:
+        - allow: [Template]
+    - type: url
+      target: https://gitlab.com/kierankilkenny/r-temp/-/blob/main/template.yaml
+      rules:
+        - allow: [Template]
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/springboot-grpc-template/template.yaml
+      rules:
+        - allow: [Template]
+    - type: url
+      target: https://github.com/spotify/cookiecutter-golang/blob/master/template.yaml
+      rules:
+        - allow: [Template]
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/docs-template/template.yaml
+      rules:
+        - allow: [Template]
